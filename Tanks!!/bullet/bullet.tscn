@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8b3aptkr0uf3"]
+
+[ext_resource type="Script" uid="uid://dd2p5l78qeyqr" path="res://bullet/bullet.gd" id="1_k2aps"]
+[ext_resource type="AudioStream" uid="uid://b6i0x68a6268x" path="res://assets/SFX/ShellExplosion.wav" id="2_0qjqd"]
+[ext_resource type="PackedScene" uid="uid://d00i17qev837c" path="res://effects/explosion.tscn" id="2_6wip1"]
+
+[node name="Bullet" type="Area2D"]
+position = Vector2(-1, 0)
+script = ExtResource("1_k2aps")
+
+[node name="ShellExplode" type="AudioStreamPlayer2D" parent="."]
+rotation = -0.0033604237
+scale = Vector2(0.49999997, 0.49999997)
+stream = ExtResource("2_0qjqd")
+volume_db = 5.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Lifetime" type="Timer" parent="."]
+
+[node name="Explosion" parent="." instance=ExtResource("2_6wip1")]
+visible = false
+scale = Vector2(0.5, 0.5)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]
+[connection signal="animation_finished" from="Explosion" to="." method="_on_explosion_animation_finished"]

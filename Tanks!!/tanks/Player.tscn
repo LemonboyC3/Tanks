@@ -1,0 +1,72 @@
+[gd_scene load_steps=9 format=3 uid="uid://cm4m1jtydiyih"]
+
+[ext_resource type="PackedScene" uid="uid://im5hs0418wmn" path="res://tanks/Tank.tscn" id="1_dicgp"]
+[ext_resource type="Texture2D" uid="uid://fh6i77ino0c5" path="res://assets/Spritesheet.png" id="2_s2sr3"]
+[ext_resource type="Script" uid="uid://yjmmbkafd71w" path="res://tanks/player.gd" id="2_t4txs"]
+[ext_resource type="PackedScene" uid="uid://dukj0r02annrb" path="res://bullet/player_bullet.tscn" id="3_t4txs"]
+[ext_resource type="AudioStream" uid="uid://c0p6bgonr0y0r" path="res://assets/SFX/ShotFiring.wav" id="5_brhbi"]
+[ext_resource type="AudioStream" uid="uid://cljpff1orv2ah" path="res://assets/SFX/EngineIdle.wav" id="6_xg371"]
+[ext_resource type="AudioStream" uid="uid://bf6u3u8el74co" path="res://assets/SFX/EngineDriving.wav" id="7_qpr0w"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t4txs"]
+custom_solver_bias = 1.0
+radius = 43.0
+height = 88.0
+
+[node name="PlayerTank" instance=ExtResource("1_dicgp")]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("2_t4txs")
+Bullet = ExtResource("3_t4txs")
+max_speed = 250
+rotation_speed = 4.0
+gun_cooldown = 0.3
+gun_spread = 0.15
+
+[node name="Body" parent="." index="0"]
+texture_filter = 1
+texture = ExtResource("2_s2sr3")
+region_enabled = true
+region_rect = Rect2(0, 264, 84, 84)
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_t4txs")
+debug_color = Color(0.99999994, 0, 0.103435956, 0.41960785)
+
+[node name="Turret" parent="." index="2"]
+texture_filter = 1
+position = Vector2(-7.1054274e-15, 0)
+rotation = 0.00011038361
+scale = Vector2(1.0083619, 0.9473844)
+texture = ExtResource("2_s2sr3")
+offset = Vector2(22, 0)
+region_enabled = true
+region_rect = Rect2(199, 36.199524, 60, 23.669033)
+
+[node name="Flash" parent="Turret" index="0"]
+position = Vector2(52.560493, -0.0061752456)
+texture = ExtResource("2_s2sr3")
+offset = Vector2(28, 0)
+region_rect = Rect2(584, 58, 56, 32)
+
+[node name="Muzzle" parent="Turret" index="1"]
+position = Vector2(60, 0)
+
+[node name="Camera2D" type="Camera2D" parent="." index="4"]
+zoom = Vector2(0.8, 0.8)
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="." index="9"]
+stream = ExtResource("5_brhbi")
+volume_db = 10.0
+
+[node name="Engineidle" type="AudioStreamPlayer2D" parent="." index="12"]
+stream = ExtResource("6_xg371")
+volume_db = -5.0
+
+[node name="Enginerunning" type="AudioStreamPlayer2D" parent="." index="13"]
+stream = ExtResource("7_qpr0w")
+volume_db = -5.0

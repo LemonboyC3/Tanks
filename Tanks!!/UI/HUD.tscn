@@ -1,0 +1,95 @@
+[gd_scene load_steps=11 format=3 uid="uid://1fyk3ij6cujo"]
+
+[ext_resource type="Script" uid="uid://cm5rqj2ijrbx5" path="res://UI/HUD.gd" id="1_uk570"]
+[ext_resource type="Texture2D" uid="uid://15746cmkbmnb" path="res://assets/shield_silver.png" id="2_f2wx0"]
+[ext_resource type="Texture2D" uid="uid://bccv2ywexpsh2" path="res://assets/UIImage/glassPanel_200.png" id="3_gppie"]
+[ext_resource type="Texture2D" uid="uid://clomuskhy5er6" path="res://assets/UIImage/barHorizontal_red_mid 200.png" id="4_gppie"]
+[ext_resource type="Texture2D" uid="uid://b4i3t2837vhw2" path="res://assets/UIImage/barHorizontal_white_mid 200.png" id="5_2ptjp"]
+[ext_resource type="FontFile" uid="uid://bptx1ofqv2upm" path="res://assets/Audiowide-Regular.ttf" id="5_md4fy"]
+[ext_resource type="Texture2D" uid="uid://7nr5s034tqve" path="res://assets/UIImage/barHorizontal_yellow_mid 200.png" id="6_md4fy"]
+
+[sub_resource type="Animation" id="Animation_rbci0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/Container/HealthBar:texture_progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_gppie")]
+}
+
+[sub_resource type="Animation" id="Animation_7i7fj"]
+resource_name = "healthbar_flash"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/Container/HealthBar:texture_progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_gppie"), ExtResource("5_2ptjp"), ExtResource("6_md4fy"), ExtResource("4_gppie"), ExtResource("5_2ptjp"), ExtResource("6_md4fy")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_am7sw"]
+_data = {
+&"RESET": SubResource("Animation_rbci0"),
+&"healthbar_flash": SubResource("Animation_7i7fj")
+}
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_uk570")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Container" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Container"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_f2wx0")
+stretch_mode = 2
+
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/Container"]
+layout_mode = 2
+texture_over = ExtResource("3_gppie")
+texture_progress = ExtResource("4_gppie")
+
+[node name="Label" type="Label" parent="MarginContainer/Container"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_override_colors/font_shadow_color = Color(0.04, 0.04, 0.04, 0.75686276)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("5_md4fy")
+theme_override_font_sizes/font_size = 24
+text = "DESTROYED: 0"
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_am7sw")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

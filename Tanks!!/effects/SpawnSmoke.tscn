@@ -1,0 +1,62 @@
+[gd_scene load_steps=12 format=3 uid="uid://b1eeu1khv7i1k"]
+
+[ext_resource type="Texture2D" uid="uid://1fbx0opus4tv" path="res://assets/Boom boom/explosion1.png" id="1_hsfee"]
+[ext_resource type="Texture2D" uid="uid://b5tnrnwh38bow" path="res://assets/Boom boom/explosion2.png" id="2_yq807"]
+[ext_resource type="Texture2D" uid="uid://yf6dk80y1rx8" path="res://assets/Boom boom/explosion3.png" id="3_j64yg"]
+[ext_resource type="Texture2D" uid="uid://56r4heaosmhx" path="res://assets/Boom boom/explosion4.png" id="4_a5iqt"]
+[ext_resource type="Texture2D" uid="uid://dqeihuxknxh6p" path="res://assets/Boom boom/explosion5.png" id="5_onwh2"]
+[ext_resource type="Texture2D" uid="uid://bxpcegaw6c43d" path="res://assets/Boom boom/explosionSmoke1.png" id="6_gj8sa"]
+[ext_resource type="Texture2D" uid="uid://c7ng7kx4xgy6a" path="res://assets/Boom boom/explosionSmoke2.png" id="7_rj6hi"]
+[ext_resource type="Texture2D" uid="uid://cjq17vl87l5uy" path="res://assets/Boom boom/explosionSmoke3.png" id="8_6yrs0"]
+[ext_resource type="Texture2D" uid="uid://lwildmaahunc" path="res://assets/Boom boom/explosionSmoke4.png" id="9_r775y"]
+[ext_resource type="Texture2D" uid="uid://je4i3f03xenw" path="res://assets/Boom boom/explosionSmoke5.png" id="10_qsx82"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q4f86"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hsfee")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_yq807")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_j64yg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_a5iqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_onwh2")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_gj8sa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_rj6hi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_6yrs0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_r775y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_qsx82")
+}],
+"loop": false,
+"name": &"smoke",
+"speed": 5.0
+}]
+
+[node name="SpawnSmoke" type="AnimatedSprite2D"]
+rotation = -0.0033604237
+sprite_frames = SubResource("SpriteFrames_q4f86")
+animation = &"smoke"
+frame = 4
+frame_progress = 1.0

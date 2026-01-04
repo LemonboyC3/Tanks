@@ -1,0 +1,75 @@
+[gd_scene load_steps=7 format=3 uid="uid://c52e40b8cv2ob"]
+
+[ext_resource type="PackedScene" uid="uid://im5hs0418wmn" path="res://tanks/Tank.tscn" id="1_usq66"]
+[ext_resource type="Texture2D" uid="uid://fh6i77ino0c5" path="res://assets/Spritesheet.png" id="2_nmiyq"]
+[ext_resource type="Script" uid="uid://ckpoxp66vwgkx" path="res://enemies/enemy.gd" id="2_teabp"]
+[ext_resource type="PackedScene" uid="uid://bdxh7qdxsp5qv" path="res://bullet/tracker_bullet.tscn" id="3_i5nck"]
+[ext_resource type="PackedScene" uid="uid://c67n2o3d5j2we" path="res://UI/Unit_Display.tscn" id="5_hpmoj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hpmoj"]
+radius = 40.0
+height = 80.0
+
+[node name="Tank" instance=ExtResource("1_usq66")]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("2_teabp")
+turret_speed = 4.0
+detect_radius = 500
+Bullet = ExtResource("3_i5nck")
+max_speed = 200
+rotation_speed = 2.0
+gun_cooldown = 0.6
+metadata/_edit_group_ = true
+
+[node name="Body" parent="." index="0"]
+texture_filter = 1
+texture = ExtResource("2_nmiyq")
+region_enabled = true
+region_rect = Rect2(691.379, 262, 80.62097, 84)
+
+[node name="UnitDisplay" parent="Body" index="0" instance=ExtResource("5_hpmoj")]
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(1, 1)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_hpmoj")
+
+[node name="Turret" parent="." index="2"]
+texture_filter = 1
+position = Vector2(4, 0)
+texture = ExtResource("2_nmiyq")
+offset = Vector2(22, 0)
+region_enabled = true
+region_rect = Rect2(512, 34, 60, 24)
+
+[node name="Flash" parent="Turret" index="0"]
+modulate = Color(1, 1, 1, 1)
+position = Vector2(45, 0)
+scale = Vector2(1, 1)
+texture = ExtResource("2_nmiyq")
+offset = Vector2(32, 0)
+region_rect = Rect2(644, 94, 50, 40)
+
+[node name="Muzzle" parent="Turret" index="1"]
+position = Vector2(55, 0)
+
+[node name="DetectRadius" type="Area2D" parent="." index="4"]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRadius" index="0"]
+debug_color = Color(0.9470549, 3.85046e-06, 0.58722115, 0.41960785)
+
+[node name="LookAhead" type="RayCast2D" parent="." index="5"]
+position = Vector2(0, -32)
+target_position = Vector2(120, -8)
+collision_mask = 7
+
+[node name="LookAhead2" type="RayCast2D" parent="." index="6"]
+position = Vector2(0, 32)
+target_position = Vector2(120, 8)
+collision_mask = 7
+
+[connection signal="health_changed" from="." to="Body/UnitDisplay" method="update_healthbar"]
+[connection signal="body_entered" from="DetectRadius" to="." method="_on_detect_radius_body_entered"]
+[connection signal="body_exited" from="DetectRadius" to="." method="_on_detect_radius_body_exited"]

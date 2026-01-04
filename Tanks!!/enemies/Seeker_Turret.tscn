@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://b25rs4136kkhn"]
+
+[ext_resource type="PackedScene" uid="uid://im5hs0418wmn" path="res://tanks/Tank.tscn" id="1_t45lr"]
+[ext_resource type="Script" uid="uid://ckpoxp66vwgkx" path="res://enemies/enemy.gd" id="2_roxvt"]
+[ext_resource type="PackedScene" uid="uid://dllqjl4of8m5r" path="res://bullet/seeker_bullet.tscn" id="3_t45lr"]
+[ext_resource type="Texture2D" uid="uid://fh6i77ino0c5" path="res://assets/Spritesheet.png" id="4_aqa64"]
+[ext_resource type="PackedScene" uid="uid://c67n2o3d5j2we" path="res://UI/Unit_Display.tscn" id="5_p1bdw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_omvf5"]
+radius = 34.0
+
+[node name="Tank" instance=ExtResource("1_t45lr")]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("2_roxvt")
+turret_speed = 5.0
+detect_radius = 500
+Bullet = ExtResource("3_t45lr")
+gun_cooldown = 1.0
+max_health = 70
+
+[node name="Body" parent="." index="0"]
+texture_filter = 1
+texture = ExtResource("4_aqa64")
+region_enabled = true
+region_rect = Rect2(532, 130, 56, 56)
+
+[node name="UnitDisplay" parent="Body" index="0" instance=ExtResource("5_p1bdw")]
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_omvf5")
+
+[node name="Turret" parent="." index="2"]
+texture_filter = 1
+rotation = 0.0013653535
+texture = ExtResource("4_aqa64")
+offset = Vector2(17, 0)
+region_enabled = true
+region_rect = Rect2(271, 60, 63, 28)
+
+[node name="Flash" parent="Turret" index="0"]
+modulate = Color(1, 1, 1, 1)
+position = Vector2(39.99996, -0.05461411)
+scale = Vector2(1, 1)
+texture = ExtResource("4_aqa64")
+offset = Vector2(35, 0)
+region_rect = Rect2(535, 18, 53, 16)
+
+[node name="Muzzle" parent="Turret" index="1"]
+position = Vector2(55, 0)
+
+[node name="DetectRadius" type="Area2D" parent="." index="6"]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRadius" index="0"]
+debug_color = Color(0.9470549, 3.85046e-06, 0.58722115, 0.41960785)
+
+[connection signal="health_changed" from="." to="Body/UnitDisplay" method="update_healthbar"]
+[connection signal="body_entered" from="DetectRadius" to="." method="_on_detect_radius_body_entered"]
+[connection signal="body_exited" from="DetectRadius" to="." method="_on_detect_radius_body_exited"]
+[connection signal="animation_finished" from="SpawnSmoke" to="." method="_on_spawn_smoke_animation_finished"]

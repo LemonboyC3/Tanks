@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://0bufc8rdw8b6"]
+
+[ext_resource type="PackedScene" uid="uid://c8b3aptkr0uf3" path="res://bullet/bullet.tscn" id="1_kvgdx"]
+[ext_resource type="Script" uid="uid://dg12pdrigx2cv" path="res://bullet/enemy_bullet.gd" id="2_w78no"]
+[ext_resource type="Texture2D" uid="uid://fh6i77ino0c5" path="res://assets/Spritesheet.png" id="2_x32u4"]
+[ext_resource type="Texture2D" uid="uid://d2nxk8aqv4ejy" path="res://assets/spr_smoke_strip24.png" id="4_8f04o"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w78no"]
+radius = 8.0
+height = 36.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rr5pb"]
+particles_animation = true
+particles_anim_h_frames = 24
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_h0nnd"]
+_data = [Vector2(0.14285716, 0.7222222), 0.0, -0.012280734, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5nyw5"]
+curve = SubResource("Curve_h0nnd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3162i"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+scale_min = 0.5
+scale_max = 0.7
+scale_curve = SubResource("CurveTexture_5nyw5")
+scale_over_velocity_min = 438.02
+scale_over_velocity_max = 438.02
+color = Color(1, 1, 1, 0.039215688)
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[node name="Bullet" instance=ExtResource("1_kvgdx")]
+position = Vector2(0, 0)
+collision_layer = 8
+collision_mask = 11
+script = ExtResource("2_w78no")
+speed = 750
+damage = 4
+lifetime = 0.7
+
+[node name="Sprite2D" parent="." index="0"]
+texture_filter = 1
+rotation = 3.1415927
+texture = ExtResource("2_x32u4")
+region_enabled = true
+region_rect = Rect2(584, 212, 36, 16)
+
+[node name="CollisionShape2D" parent="." index="1"]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_w78no")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." index="4"]
+show_behind_parent = true
+material = SubResource("CanvasItemMaterial_rr5pb")
+position = Vector2(-13, 0)
+scale = Vector2(0.5, 0.5)
+amount = 50
+texture = ExtResource("4_8f04o")
+lifetime = 0.2
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_3162i")

@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://dllqjl4of8m5r"]
+
+[ext_resource type="PackedScene" uid="uid://c8b3aptkr0uf3" path="res://bullet/bullet.tscn" id="1_mb81w"]
+[ext_resource type="Script" uid="uid://dg12pdrigx2cv" path="res://bullet/enemy_bullet.gd" id="2_cyr85"]
+[ext_resource type="Texture2D" uid="uid://fh6i77ino0c5" path="res://assets/Spritesheet.png" id="3_5olrr"]
+[ext_resource type="Texture2D" uid="uid://d2nxk8aqv4ejy" path="res://assets/spr_smoke_strip24.png" id="4_cyr85"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w78no"]
+radius = 8.0
+height = 36.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cyr85"]
+particles_animation = true
+particles_anim_h_frames = 24
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_5olrr"]
+_data = [Vector2(0.14285716, 0.7222222), 0.0, -0.012280734, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5nyw5"]
+curve = SubResource("Curve_5olrr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q6d6g"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+scale_min = 0.5
+scale_max = 0.7
+scale_curve = SubResource("CurveTexture_5nyw5")
+scale_over_velocity_min = 438.02
+scale_over_velocity_max = 438.02
+color = Color(1, 1, 1, 0.45490196)
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[node name="Bullet" instance=ExtResource("1_mb81w")]
+position = Vector2(0, 0)
+collision_layer = 8
+collision_mask = 11
+script = ExtResource("2_cyr85")
+speed = 400
+damage = 6
+lifetime = 2.0
+steer_force = 25.0
+
+[node name="Sprite2D" parent="." index="1"]
+texture_filter = 1
+rotation = 3.1415927
+texture = ExtResource("3_5olrr")
+region_enabled = true
+region_rect = Rect2(584, 244, 36, 16)
+
+[node name="CollisionShape2D" parent="." index="2"]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_w78no")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." index="4"]
+show_behind_parent = true
+material = SubResource("CanvasItemMaterial_cyr85")
+position = Vector2(-16, 0)
+scale = Vector2(0.5, 0.5)
+amount = 20
+texture = ExtResource("4_cyr85")
+lifetime = 0.4
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_q6d6g")

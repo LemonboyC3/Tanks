@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://dm0o05fhms7jn"]
+
+[ext_resource type="PackedScene" uid="uid://im5hs0418wmn" path="res://tanks/Tank.tscn" id="1_j76pp"]
+[ext_resource type="Script" uid="uid://dmj63b72sn8hi" path="res://enemies/chaser.gd" id="2_m2omx"]
+[ext_resource type="PackedScene" uid="uid://dllqjl4of8m5r" path="res://bullet/seeker_bullet.tscn" id="3_j76pp"]
+[ext_resource type="Texture2D" uid="uid://fh6i77ino0c5" path="res://assets/Spritesheet.png" id="4_vv84r"]
+[ext_resource type="PackedScene" uid="uid://c67n2o3d5j2we" path="res://UI/Unit_Display.tscn" id="5_0ol3k"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hpmoj"]
+radius = 40.0
+height = 80.0
+
+[node name="Tank" instance=ExtResource("1_j76pp")]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("2_m2omx")
+turret_speed = 4.0
+detect_radius = 500
+Bullet = ExtResource("3_j76pp")
+max_speed = 150
+rotation_speed = 2.0
+gun_cooldown = 1.5
+metadata/_edit_group_ = true
+
+[node name="Body" parent="." index="0"]
+texture_filter = 1
+texture = ExtResource("4_vv84r")
+region_enabled = true
+region_rect = Rect2(268, 186, 80, 75)
+
+[node name="DetectRadius" type="Area2D" parent="Body" index="0"]
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/DetectRadius" index="0"]
+debug_color = Color(0.9470549, 3.85046e-06, 0.58722115, 0.41960785)
+
+[node name="LookAhead" type="RayCast2D" parent="Body" index="1"]
+position = Vector2(0, -32)
+target_position = Vector2(120, -8)
+collision_mask = 7
+
+[node name="LookAhead2" type="RayCast2D" parent="Body" index="2"]
+position = Vector2(0, 32)
+target_position = Vector2(120, 8)
+collision_mask = 7
+
+[node name="ChaseRadius" type="Area2D" parent="Body" index="3"]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/ChaseRadius" index="0"]
+debug_color = Color(0.102536045, 0.6473829, 0, 0.41960785)
+
+[node name="UnitDisplay" parent="Body" index="4" instance=ExtResource("5_0ol3k")]
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(1, 1)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_hpmoj")
+
+[node name="Turret" parent="." index="2"]
+texture_filter = 1
+position = Vector2(1.0000019, 0)
+rotation = -0.00054617424
+texture = ExtResource("4_vv84r")
+offset = Vector2(22, 0)
+region_enabled = true
+region_rect = Rect2(371, 14, 60, 24)
+
+[node name="Flash" parent="Turret" index="0"]
+modulate = Color(1, 1, 1, 1)
+position = Vector2(47, 0)
+scale = Vector2(1.2222222, 1.2222222)
+texture = ExtResource("4_vv84r")
+offset = Vector2(32, 0)
+region_rect = Rect2(584, 58, 56, 32)
+
+[node name="Muzzle" parent="Turret" index="1"]
+position = Vector2(60, 0)
+
+[connection signal="health_changed" from="." to="Body/UnitDisplay" method="update_healthbar"]
+[connection signal="body_entered" from="Body/DetectRadius" to="." method="_on_detect_radius_body_entered"]
+[connection signal="body_exited" from="Body/DetectRadius" to="." method="_on_detect_radius_body_exited"]
+[connection signal="body_entered" from="Body/ChaseRadius" to="." method="_on_chase_radius_body_entered"]
+[connection signal="body_exited" from="Body/ChaseRadius" to="." method="_on_chase_radius_body_exited"]
+[connection signal="animation_finished" from="SpawnSmoke" to="." method="_on_spawn_smoke_animation_finished"]
